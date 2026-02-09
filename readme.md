@@ -92,7 +92,7 @@ node -v
 跑完後 **確保你的琴是開機的**，再輸入以下指令並按 <kbd>Enter</kbd>
 
    ```Bash
-      node -e "console.log(require('easymidi').getInputs())"
+   node -e "console.log(require('easymidi').getInputs())"
    ```
 
 你會看到類似這樣的結果： [ '2- Digital Keyboard-1' ]
