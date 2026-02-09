@@ -55,7 +55,7 @@ node -v
 ### 2. 安裝 Arduino IDE
 這是要把程式寫入 Arduino 板子的工具。
 - **下載連結：** [Arduino Software](https://www.arduino.cc/en/software)
-- **下載版本：** "請下載 Windows 64bit 版本，除非你的電腦非常老舊(但那麼老的電腦，燕雲十六聲應該也玩不起來)"。
+- **下載版本：** 請下載 "Windows 64bit" 版本，除非你的電腦非常老舊(但那麼老的電腦，燕雲十六聲應該也玩不起來)。
 
 ---
 
