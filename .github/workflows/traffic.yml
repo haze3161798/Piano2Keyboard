@@ -9,7 +9,7 @@ jobs:
   collect:
     runs-on: ubuntu-latest
     steps:
-      - uses: jgehrcke/github-repo-stats@v1.4.0
+      - uses: jgehrcke/github-repo-stats@master
       - name: Run Traffic Stats
         uses: jgehrcke/github-repo-stats@v1
         with:
