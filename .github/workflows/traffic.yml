@@ -9,7 +9,7 @@ jobs:
   collect:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: jgehrcke/github-repo-stats@v1.4.0
       - name: Run Traffic Stats
         uses: jgehrcke/github-repo-stats@v1
         with:
