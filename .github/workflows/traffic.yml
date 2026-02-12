@@ -2,17 +2,17 @@ name: Traffic Stats
 
 on:
   schedule:
-    - cron: "0 23 * * *"
-  workflow_dispatch:
+    - cron: "0 23 * * *" # 每天跑一次
+  workflow_dispatch:     # 允許手動執行
 
 jobs:
-  collect:
+  traffic:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      - name: Run Traffic Stats
-        # 嘗試 1：改用 main 分支
-        uses: jgehrcke/github-repo-stats@main
+      
+      - name: Repository Traffic
+        uses: sangonzal/repository-traffic-action@v1
         with:
-          ghtoken: ${{ secrets.GH_TOKEN }}
+          # 注意：這裡的參數名稱不一樣，是 github_token
+          github_token: ${{ secrets.GH_TOKEN }}
