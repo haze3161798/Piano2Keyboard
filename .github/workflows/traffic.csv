@@ -1,0 +1,75 @@
+name: Traffic Stats
+
+on:
+  schedule:
+    - cron: "0 23 * * *"
+  workflow_dispatch:
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Fetch Traffic Data & Save
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          # 1. 設定 Git
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          
+          # 2. 切換到 traffic 分支 (如果沒有就建立一個孤兒分支)
+          git checkout traffic 2>/dev/null || git checkout --orphan traffic
+          # 清空目錄以免衝突
+          git rm -rf . || true
+          
+          # 3. 執行 Python 腳本抓取數據並存成 CSV
+          python3 -c "
+          import os, requests, csv
+          
+          repo = os.environ['REPO']
+          token = os.environ['GH_TOKEN']
+          headers = {'Authorization': f'token {token}', 'Accept': 'application/vnd.github.v3+json'}
+          
+          def get_traffic(type):
+              r = requests.get(f'https://api.github.com/repos/{repo}/traffic/{type}', headers=headers)
+              if r.status_code != 200: print(f'Error: {r.status_code}'); return []
+              return r.json().get(type, [])
+              
+          clones = get_traffic('clones')
+          views = get_traffic('views')
+          
+          # 合併數據
+          data = {}
+          for c in clones:
+              date = c['timestamp'][:10]
+              data.setdefault(date, {'c': 0, 'uc': 0, 'v': 0, 'uv': 0})
+              data[date]['c'] = c['count']
+              data[date]['uc'] = c['uniques']
+              
+          for v in views:
+              date = v['timestamp'][:10]
+              data.setdefault(date, {'c': 0, 'uc': 0, 'v': 0, 'uv': 0})
+              data[date]['v'] = v['count']
+              data[date]['uv'] = v['uniques']
+              
+          with open('traffic.csv', 'w') as f:
+              writer = csv.writer(f)
+              writer.writerow(['Date', 'Clones', 'Unique Clones', 'Views', 'Unique Views'])
+              for date in sorted(data.keys()):
+                  d = data[date]
+                  writer.writerow([date, d['c'], d['uc'], d['v'], d['uv']])
+          print('Successfully generated traffic.csv')
+          "
+          
+          # 4. 推送回 GitHub
+          git add traffic.csv
+          git commit -m "Update traffic stats" || echo "No changes to commit"
+          # 使用 Token 強制推送
+          git push https://${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git traffic
