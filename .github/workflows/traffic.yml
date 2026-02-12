@@ -6,16 +6,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  collect:
+  traffic:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
-      # 👇 這是關鍵！我們先幫機器人建好它找不到的資料夾，這樣就不會報錯了
-      - name: Create Data Folder (Fix Bug)
-        run: mkdir -p ghrs-data
-
-      - name: Run Traffic Stats
-        uses: jgehrcke/github-repo-stats@main
+      - name: Repository Traffic
+        # ✅ 改用 master 版本，避開之前的語法錯誤
+        uses: sangonzal/repository-traffic-action@master
         with:
-          ghtoken: ${{ secrets.GH_TOKEN }}
+          github_token: ${{ secrets.GH_TOKEN }}
