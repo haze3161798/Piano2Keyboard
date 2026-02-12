@@ -6,13 +6,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  traffic:
+  collect:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: Repository Traffic
-        uses: sangonzal/repository-traffic-action@master
+      - name: Run Traffic Stats
+        uses: jgehrcke/github-repo-stats@main
         env:
-          # 👇 這是關鍵！這個工具不收 'with'，只收 'env'，而且名字一定要是這個
-          TRAFFIC_ACTION_TOKEN: ${{ secrets.GH_TOKEN }}
+          # 👇 這是密技！我們直接用環境變數覆蓋那個會報錯的路徑設定
+          # 強迫它把星星數據存在根目錄，而不是那個不存在的資料夾
+          INPUT_STARGAZER_TS_SNAPSHOTS_INOUTPATH: stargazer-snapshots.csv
+        with:
+          ghtoken: ${{ secrets.GH_TOKEN }}
