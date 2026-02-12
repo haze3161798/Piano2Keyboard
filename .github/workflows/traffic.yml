@@ -11,10 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      # 👇 這是這場戰役的關鍵！既然它不會自己建資料夾，我們幫它建！
+      - name: Create Data Folder
+        run: mkdir -p ghrs-data
+
       - name: Run Traffic Stats
-        # 👇 改回 main，因為 master 不存在
+        # ✅ 使用確認可行的 main 版本
         uses: jgehrcke/github-repo-stats@main
         with:
           ghtoken: ${{ secrets.GH_TOKEN }}
-          # 👇 關鍵救星：指定它把檔案存到根目錄，不要去存那個不存在的 ghrs-data 資料夾
-          stargazer-ts-snapshots-inoutpath: stargazer-snapshots.csv
+          # ❌ 把之前那個導致報錯的設定拿掉，回歸最單純的設定
