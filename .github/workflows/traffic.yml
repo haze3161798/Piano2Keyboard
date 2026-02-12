@@ -6,16 +6,15 @@ on:
   workflow_dispatch:
 
 jobs:
-  collect:
+  traffic:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: Run Traffic Stats
-        uses: jgehrcke/github-repo-stats@main
-        env:
-          # 👇 這是密技！我們直接用環境變數覆蓋那個會報錯的路徑設定
-          # 強迫它把星星數據存在根目錄，而不是那個不存在的資料夾
-          INPUT_STARGAZER_TS_SNAPSHOTS_INOUTPATH: stargazer-snapshots.csv
+      - name: Traffic to Badge
+        uses: yi-jiayu/github-traffic-to-badge@v1.4.0
         with:
-          ghtoken: ${{ secrets.GH_TOKEN }}
+          # 👇 這個工具的參數名稱叫 accessToken
+          accessToken: ${{ secrets.GH_TOKEN }}
+          # 指定數據要存在 traffic 分支
+          branch: traffic
