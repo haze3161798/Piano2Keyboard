@@ -6,13 +6,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  traffic:
+  collect:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: Repository Traffic
-        uses: sangonzal/repository-traffic-action@master
-        env:
-          # 👇 關鍵修改：要把 'with' 改成 'env'，而且變數名稱必須是這個
-          TRAFFIC_ACTION_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Run Traffic Stats
+        uses: jgehrcke/github-repo-stats@master
+        with:
+          ghtoken: ${{ secrets.GH_TOKEN }}
+          # 👇 這是關鍵修改：我們指定它把檔案存在根目錄，避開 "ghrs-data" 資料夾報錯的問題
+          stargazer_ts_snapshots_inoutpath: stargazer-snapshots.csv
