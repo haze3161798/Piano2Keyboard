@@ -11,8 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # 👇 這是修復 Bug 的關鍵步驟：我們先幫機器人建好它找不到的資料夾
-      - name: Fix Bug - Create Data Folder
+      # 👇 這是關鍵！我們先幫機器人建好它找不到的資料夾，這樣就不會報錯了
+      - name: Create Data Folder (Fix Bug)
         run: mkdir -p ghrs-data
 
       - name: Run Traffic Stats
