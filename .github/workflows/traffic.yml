@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Repository Traffic
-        # ✅ 改用 master 版本，避開之前的語法錯誤
         uses: sangonzal/repository-traffic-action@master
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}
+        env:
+          # 👇 關鍵修改：要把 'with' 改成 'env'，而且變數名稱必須是這個
+          TRAFFIC_ACTION_TOKEN: ${{ secrets.GH_TOKEN }}
