@@ -6,18 +6,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  collect:
+  traffic:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
-      # 👇 這是這場戰役的關鍵！既然它不會自己建資料夾，我們幫它建！
-      - name: Create Data Folder
-        run: mkdir -p ghrs-data
-
-      - name: Run Traffic Stats
-        # ✅ 使用確認可行的 main 版本
-        uses: jgehrcke/github-repo-stats@main
-        with:
-          ghtoken: ${{ secrets.GH_TOKEN }}
-          # ❌ 把之前那個導致報錯的設定拿掉，回歸最單純的設定
+      - name: Repository Traffic
+        uses: sangonzal/repository-traffic-action@master
+        env:
+          # 👇 這是關鍵！這個工具不收 'with'，只收 'env'，而且名字一定要是這個
+          TRAFFIC_ACTION_TOKEN: ${{ secrets.GH_TOKEN }}
