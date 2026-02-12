@@ -2,17 +2,20 @@ name: Traffic Stats
 
 on:
   schedule:
-    - cron: "0 23 * * *" # 每天跑一次
-  workflow_dispatch:     # 允許手動執行
+    - cron: "0 23 * * *"
+  workflow_dispatch:
 
 jobs:
-  traffic:
+  collect:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Repository Traffic
-        uses: sangonzal/repository-traffic-action@v1
+
+      # 👇 這是修復 Bug 的關鍵步驟：我們先幫機器人建好它找不到的資料夾
+      - name: Fix Bug - Create Data Folder
+        run: mkdir -p ghrs-data
+
+      - name: Run Traffic Stats
+        uses: jgehrcke/github-repo-stats@master
         with:
-          # 注意：這裡的參數名稱不一樣，是 github_token
-          github_token: ${{ secrets.GH_TOKEN }}
+          ghtoken: ${{ secrets.GH_TOKEN }}
