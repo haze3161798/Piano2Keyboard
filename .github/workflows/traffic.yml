@@ -16,6 +16,6 @@ jobs:
         run: mkdir -p ghrs-data
 
       - name: Run Traffic Stats
-        uses: jgehrcke/github-repo-stats@master
+        uses: jgehrcke/github-repo-stats@main
         with:
           ghtoken: ${{ secrets.GH_TOKEN }}
