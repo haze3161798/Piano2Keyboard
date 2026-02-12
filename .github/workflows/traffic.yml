@@ -12,8 +12,9 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Run Traffic Stats
-        uses: jgehrcke/github-repo-stats@master
+        # 👇 改回 main，因為 master 不存在
+        uses: jgehrcke/github-repo-stats@main
         with:
           ghtoken: ${{ secrets.GH_TOKEN }}
-          # 👇 這是關鍵修改：我們指定它把檔案存在根目錄，避開 "ghrs-data" 資料夾報錯的問題
-          stargazer_ts_snapshots_inoutpath: stargazer-snapshots.csv
+          # 👇 關鍵救星：指定它把檔案存到根目錄，不要去存那個不存在的 ghrs-data 資料夾
+          stargazer-ts-snapshots-inoutpath: stargazer-snapshots.csv
